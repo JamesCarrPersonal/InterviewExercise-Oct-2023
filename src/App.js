@@ -3,14 +3,18 @@ import "./App.css";
 import axios from "axios";
 
 const App = () => {
+  // React states
   const [isloading, setIsloading] = useState(true);
   const [openData, setOpenData] = useState([]);
+
+  // Search states
   const [searchInput, setSearchInput] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
 
+  // use Axios to load the JSON file
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/OpenDay.json`)
+      .get("./OpenDay.json")
       .then((response) => {
         setOpenData(response.data);
         setIsloading(false);
@@ -20,6 +24,7 @@ const App = () => {
       });
   }, []);
 
+  // search logic (looks for matches in the title and short description only)
   useEffect(() => {
     var filteredData = [];
     if (openData && openData.topics) {
@@ -34,6 +39,7 @@ const App = () => {
     setFilteredResults(filteredData);
   }, [openData, searchInput]);
 
+  // component: Program Card - displays basic details on a program
   function ProgramCard(prog) {
     return (
       <li id={prog.id}>
@@ -49,6 +55,7 @@ const App = () => {
     );
   }
 
+  // component: Topic Card - contains mulitple Program Cards
   function TopicCard(data) {
     return (
       <article className={"card"} key={"index_" + data.id}>
@@ -70,6 +77,7 @@ const App = () => {
     );
   }
 
+  // main app output
   return (
     <div className="App">
       <header className="header">
